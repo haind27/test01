@@ -1,0 +1,33 @@
+---
+# get date
+- set_fact: creationdate="{{lookup('pipe','date "+%Y/%m/%d %H:%M"')}}"
+
+# Create a VM from a template
+- name: Clone the template
+  vmware_guest: 
+    hostname: esxi01.haind-cloud.local
+    username: administrator@esxi01.haind-cloud.local
+    password: Mcwxns4u@1234
+    validate_certs: False
+    datacenter: myDC
+    name: '{{ inventory_hostname }}'
+    template: centos
+    folder: /myDC/vm
+    state: poweredon
+    guest_id: centos64Guest
+    annotation: "{{ notes }} - {{ creationdate }}"
+    networks:
+    - name: VM Network
+      ip:  192.168.224.145
+      netmask: 255.255.255.0
+      gateway: 192.168.224.1
+      dns_servers:
+      - 192.168.224.141
+    customization:
+      autologon: yes
+      dns_servers:
+      domain: "haind-cloud.local"
+      hostname: '{{ inventory_hostname }}'
+    wait_for_ip_address: yes
+  delegate_to: localhost
+
