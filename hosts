@@ -1,0 +1,2 @@
+[example_group]
+vm01 guest_custom_ip='192.168.224.145' vsphere_datastore='datastore3' ansible_host_group='example_group'
